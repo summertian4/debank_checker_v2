@@ -52,7 +52,6 @@ async def format_result(account_data: FormattedAccount,
             file_path='results/with_nft.txt',
             file_content=f'{account_data_for_file} | {nfts_count} NFT\'s\n'
         )
-    print(split,'🍎split')
     if split == 0:
         file_path = 'results/all_balances.txt'
     elif split == 1:
