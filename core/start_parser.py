@@ -356,7 +356,7 @@ class Parser:
 
         return pools
 
-    async def start_parser(self) -> None:
+    async def start_parser(self, args) -> None:
         client: AsyncSession = AsyncSession(
             verify=False,
             impersonate='chrome110',
@@ -387,13 +387,13 @@ class Parser:
         nfts_count: int = await self.get_nft_count(client=client,
                                                    chains=nft_chains_list)
         logger.info(f'{self.account_data.address} | {nfts_count} NFT\'s')
-
         if total_usd_balance <= 0:
             await format_result(account_data=self.account_data,
                                 total_usd_balance=total_usd_balance,
                                 token_balances={},
                                 pools_balances={},
-                                nfts_count=nfts_count)
+                                nfts_count=nfts_count,
+                                args=args)
             return
 
         token_balances: dict = await self.get_tokens_balance(client=client,
@@ -413,13 +413,14 @@ class Parser:
                             total_usd_balance=total_usd_balance,
                             token_balances=token_balances,
                             pools_balances=pools_balances,
-                            nfts_count=nfts_count)
+                            nfts_count=nfts_count,
+                            args=args)
 
 
-async def start_parser(account_data: FormattedAccount) -> None:
+async def start_parser(account_data: FormattedAccount, args) -> None:
     async with loader.semaphore:
         try:
-            return await Parser(account_data=account_data).start_parser()
+            return await Parser(account_data=account_data).start_parser(args)
 
         except Exception as error:
             print(traceback.format_exc())

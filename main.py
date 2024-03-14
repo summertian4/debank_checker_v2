@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 from multiprocessing.dummy import Pool
 from os import mkdir
@@ -20,11 +21,16 @@ logger.add(stderr, format='<white>{time:HH:mm:ss}</white>'
                           ' - <white>{message}</white>')
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="add args")
+    parser.add_argument("--split", type=int, default=0, help="split = 0,1; split output or not")
+    parser.add_argument("--threads", type=int, default=10, help="threads > 0; thread number")
+    return parser.parse_args()
+
 async def main() -> None:
     loader.semaphore = asyncio.Semaphore(value=threads)
-
     tasks: list[asyncio.Task] = [
-        asyncio.create_task(coro=start_parser(account_data=current_account))
+        asyncio.create_task(coro=start_parser(account_data=current_account, args=args))
         for current_account in formatted_accounts_list
     ]
 
@@ -32,6 +38,7 @@ async def main() -> None:
 
 
 if __name__ == '__main__':
+    args = parse_args()
     if not exists(path='results'):
         mkdir(path='results')
 
@@ -42,7 +49,7 @@ if __name__ == '__main__':
 
     logger.success(f'Successfully Loaded {proxy_count} Proxies')
 
-    threads: int = int(input('\nThreads: '))
+    threads: int = int(args.threads)
     last_account_data: str = ''
 
     with open(file='data/accounts.txt',
