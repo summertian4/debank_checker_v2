@@ -56,8 +56,9 @@ async def format_result(account_data: FormattedAccount,
         async with asyncio.Lock():
             await append_file(
                 file_path='results/zero_balance.txt',
-                file_content=f'{account_data_for_file} | Total Balance: ${total_usd_balance} | '
-                             f'Tokens Balance: ${tokens_balance} | Pools Balance: ${pools_balance}\n'
+                # file_content=f'{account_data_for_file} | Total Balance: ${total_usd_balance} | '
+                #              f'Tokens Balance: ${tokens_balance} | Pools Balance: ${pools_balance}\n'
+                file_content=f'{account_data_for_file}\t{total_usd_balance}\n'
             )
 
         return True
@@ -76,8 +77,9 @@ async def format_result(account_data: FormattedAccount,
     async with asyncio.Lock():
         await append_file(
             file_path=file_path,
-            file_content=f'{account_data_for_file} | Total Balance: ${total_usd_balance} | '
-                         f'Tokens Balance: ${tokens_balance} | Pools Balance: ${pools_balance}\n'
+            # file_content=f'{account_data_for_file} | Total Balance: ${total_usd_balance} | '
+            #              f'Tokens Balance: ${tokens_balance} | Pools Balance: ${pools_balance}\n'
+            file_content=f'{account_data_for_file} \t{total_usd_balance}\n'
         )
 
     return True
