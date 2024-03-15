@@ -24,7 +24,7 @@ logger.add(stderr, format='<white>{time:HH:mm:ss}</white>'
 def parse_args():
     parser = argparse.ArgumentParser(description="add args")
     parser.add_argument("--split", type=int, default=0, help="split = 0,1; split output or not")
-    parser.add_argument("--threads", type=int, default=10, help="threads > 0; thread number")
+    parser.add_argument("--threads", type=int, default=1, help="threads > 0; thread number")
     return parser.parse_args()
 
 async def main() -> None:
